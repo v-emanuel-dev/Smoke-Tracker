@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.ivip.smoketrack.data.preferences.ThemeMode
 import com.ivip.smoketrack.ui.viewmodel.SmokeTrackUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,7 +20,8 @@ import com.ivip.smoketrack.ui.viewmodel.SmokeTrackUiState
 fun SettingsScreen(
     uiState: SmokeTrackUiState,
     onNavigateBack: () -> Unit,
-    onSaveGoal: (Int, Int) -> Unit
+    onSaveGoal: (Int, Int) -> Unit,
+    onThemeChange: (ThemeMode) -> Unit
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
 
@@ -46,9 +46,25 @@ fun SettingsScreen(
         ) {
             item {
                 Text(
-                    text = "Meta Diária",
+                    text = "Aparência",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
+                )
+            }
+
+            item {
+                ThemeCard(
+                    currentTheme = uiState.themeMode,
+                    onThemeChange = onThemeChange
+                )
+            }
+
+            item {
+                Text(
+                    text = "Meta Diária",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
 
@@ -97,6 +113,77 @@ fun SettingsScreen(
                     showEditDialog = false
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun ThemeCard(
+    currentTheme: ThemeMode,
+    onThemeChange: (ThemeMode) -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            Text(
+                text = "Tema do Aplicativo",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FilterChip(
+                    selected = currentTheme == ThemeMode.LIGHT,
+                    onClick = { onThemeChange(ThemeMode.LIGHT) },
+                    label = { Text("Claro") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.WbSunny,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                FilterChip(
+                    selected = currentTheme == ThemeMode.DARK,
+                    onClick = { onThemeChange(ThemeMode.DARK) },
+                    label = { Text("Escuro") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.NightsStay,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                FilterChip(
+                    selected = currentTheme == ThemeMode.SYSTEM,
+                    onClick = { onThemeChange(ThemeMode.SYSTEM) },
+                    label = { Text("Auto") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Autorenew,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }

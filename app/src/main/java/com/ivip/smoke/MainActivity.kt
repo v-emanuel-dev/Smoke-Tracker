@@ -4,8 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModelProvider
 import com.ivip.smoketrack.data.database.SmokeTrackDatabase
+import com.ivip.smoketrack.data.preferences.ThemeMode
+import com.ivip.smoketrack.data.preferences.ThemePreferences
 import com.ivip.smoketrack.data.repository.SmokeTrackRepository
 import com.ivip.smoketrack.navigation.SmokeTrackNavigation
 import com.ivip.smoketrack.ui.theme.SmokeTrackTheme
@@ -27,12 +32,22 @@ class MainActivity : ComponentActivity() {
             dailyGoalDao = database.dailyGoalDao()
         )
 
+        // Inicializar preferências de tema
+        val themePreferences = ThemePreferences(applicationContext)
+
         // Criar ViewModel
-        val factory = SmokeTrackViewModelFactory(repository)
+        val factory = SmokeTrackViewModelFactory(repository, themePreferences)
         viewModel = ViewModelProvider(this, factory)[SmokeTrackViewModel::class.java]
 
         setContent {
-            SmokeTrackTheme {
+            val uiState by viewModel.uiState.collectAsState()
+            val isDarkTheme = when (uiState.themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+
+            SmokeTrackTheme(darkTheme = isDarkTheme) {
                 SmokeTrackNavigation(viewModel = viewModel)
             }
         }

@@ -50,7 +50,8 @@ fun SmokeTrackNavigation(
             SettingsScreen(
                 uiState = uiState,
                 onNavigateBack = { navController.popBackStack() },
-                onSaveGoal = { max, reduction -> viewModel.saveGoal(max, reduction) }
+                onSaveGoal = { max, reduction -> viewModel.saveGoal(max, reduction) },
+                onThemeChange = { mode -> viewModel.setThemeMode(mode) }
             )
         }
     }

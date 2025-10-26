@@ -272,7 +272,7 @@ fun ProgressItem(
         Spacer(modifier = Modifier.height(8.dp))
 
         LinearProgressIndicator(
-            progress = { progress },
+            progress = { progress },  // ✅ CORRIGIDO - Adicionar lambda
             modifier = Modifier
                 .fillMaxWidth()
                 .height(12.dp)
