@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smoke Traker</string>
+    <string name="app_name">TimeTracker</string>
+    <string name="timer_service_notification_title">TimeTracker em execução</string>
+    <string name="timer_service_notification_description">Timer Pomodoro ativo</string>
 </resources>
