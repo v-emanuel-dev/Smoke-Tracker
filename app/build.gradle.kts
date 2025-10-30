@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.timetracker"
+    namespace = "com.ivip.pomodorotimetrackerpro"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.timetracker"
+        applicationId = "com.ivip.pomodorotimetrackerpro"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
